@@ -3,6 +3,8 @@
 pip install tensorflow
 pip install keras
 pip install tf-nightly
-pip install opencv-python
+pip install opencv-python (не потрібно)
+pip install Pillow
 
 (важку лібу "OpenCV" можна буде замінити на "PIL", але для цього треба адаптувати код)
+UPD: код адаптовано, OpenCV не потрібна

@@ -1,13 +1,17 @@
 import os
 path = os.getcwd()
+#=================================================================
+# це треба щоб TensorFlow не кидав щоразу попередження, що не може застосувати GPU
+# (можна видалити, якщо ви встановили програму CUDA)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-
+#=================================================================
 import numpy as np
 from tensorflow import keras
 from tensorflow.keras.datasets import mnist
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import Flatten
-import cv2 as cv
+# import cv2 as cv
+from PIL import Image as im
 
 #=================================================================
 # загрузка пакету даних MNIST і занесення даних в змінні
@@ -16,13 +20,33 @@ import cv2 as cv
 # функція нормалізації матриці (зображення)
 def norm(x: np.ndarray):
     # перетворення кольрової схеми зображення у відтінки сірого
-    ret = cv.cvtColor(x, cv.COLOR_BGR2GRAY)
+        # зараз не потрібно, бо використовується PIL
+    # ret = cv.cvtColor(x, cv.COLOR_BGR2GRAY)
+
     # ділення кожного елемента матриці на 255 щоб отримати значення в діапазоні 0-1
-    ret = ret/255
+    ret = x / 255
+
+    # додавання нової осі для розширення масиву
+    ret = np.expand_dims(ret, axis=0)
     return ret
 #=================================================================
-# нормалізація тренувальних даних (вони і так у відтінках сірого,
-# тому просто ділимо значення матриць)
+# функція для завантаження картинки через PIL в потрібному вигляді
+def open(p: str):
+    '''
+    p - строкова змінна, яка приймає лише назву картинки
+    і розширення (img.png або img.jpg)
+
+    картинка має знаходитись в одному файлі зі скриптом
+    '''
+    img = im.open(os.path.join(path, p)).convert('L')
+    (width, height) = img.size
+    img = list(img.getdata())
+    img = np.array(img)
+    img = img.reshape((height, width))
+    return img
+#=================================================================
+# нормалізація тренувальних даних
+# матриці в цьому наборі вже підготовані, а функції нормалізації за це відповідає "np.expand_dims"
 img_train = img_train / 255
 img_test = img_test / 255
 #=================================================================
@@ -65,9 +89,8 @@ model.evaluate(img_test, answ_test_cat)
 #model.save('IRC_MNIST.h5')
 #=================================================================
 # передача власного зображення в модель для перевірки
-img = cv.imread(os.path.join(path, 'MyTestNum.png'))
+img = open('MyTestNum.png')
 img = norm(img)
-img = np.expand_dims(img, axis=0)
 res = model.predict(img)
 print(f"Розпізнана цифра: {np.argmax(res)}")
 #=================================================================
