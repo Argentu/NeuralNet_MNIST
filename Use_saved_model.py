@@ -10,6 +10,11 @@ from PIL import Image as im
 def open(p: str) -> np.ndarray:
     img = im.open(os.path.join(path, p)).convert('L')
     (width, height) = img.size
+    if width > 28 and height > 28:
+        img = img.resize((28,28), im.ANTIALIAS)
+    else:
+        pass
+    (width, height) = img.size
     img = list(img.getdata())
     img = np.array(img)
     img = img.reshape((height, width))

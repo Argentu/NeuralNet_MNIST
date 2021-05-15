@@ -30,7 +30,7 @@ def norm(x: np.ndarray):
     ret = np.expand_dims(ret, axis=0)
     return ret
 #=================================================================
-# функція для завантаження картинки через PIL в потрібному вигляді
+# функція для завантаження картинки через PIL в потрібному вигляді (+ стандартизує розмір)
 def open(p: str):
     '''
     p - строкова змінна, яка приймає лише назву картинки
@@ -39,6 +39,11 @@ def open(p: str):
     картинка має знаходитись в одному файлі зі скриптом
     '''
     img = im.open(os.path.join(path, p)).convert('L')
+    (width, height) = img.size
+    if width > 28 and height > 28:
+        img = img.resize((28,28), im.ANTIALIAS)
+    else:
+        pass
     (width, height) = img.size
     img = list(img.getdata())
     img = np.array(img)
