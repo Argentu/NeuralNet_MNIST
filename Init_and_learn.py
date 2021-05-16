@@ -70,11 +70,11 @@ model = keras.Sequential([
 ])
 #=================================================================
 # створення моделі з певними параметрами
-    # оптимізація навчання - алгоритм "Adam"
+    # оптимізація навчання - алгоритм "NAdam"
     # функція втрат - категоріальна крос ентропія
     # метрика - точність
 model.compile(
-    optimizer = 'adam',
+    optimizer = 'nadam',
     loss = 'categorical_crossentropy',
     metrics = ['accuracy']
     )
@@ -85,13 +85,13 @@ model.compile(
     # розмір міні-батча (mini-batch)
     # кількість прогону тренувань
     # частина тренувальної вибірки, яка використовується, як вибірка валідації
-model.fit(img_train, answ_train_cat, batch_size=30, epochs=5, validation_split=0.2)
+model.fit(img_train, answ_train_cat, batch_size=20, epochs=10, validation_split=0.2)
 #=================================================================
 # прогонка навченої моделі по тестовій вибірці
 model.evaluate(img_test, answ_test_cat)
 #=================================================================
 # збереження навченої моделі в файл 'IRC_MNIST.h5'
-#model.save('IRC_MNIST.h5')
+model.save('IRC_MNIST.h5')
 #=================================================================
 # передача власного зображення в модель для перевірки
 img = open('MyTestNum.png')
