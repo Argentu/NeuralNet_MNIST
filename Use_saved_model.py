@@ -27,7 +27,7 @@ def norm(x: np.ndarray):
 
 model = lm('IRC_MNIST.h5')
 
-img = open('MyTestNum.png')
+img = open('MyTestNum1.png')
 img = norm(img)
 res = model.predict(img)
 print(f"Розпізнана цифра: {np.argmax(res)}")

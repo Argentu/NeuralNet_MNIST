@@ -2,8 +2,7 @@ import os
 import numpy as np
 from tensorflow import keras
 from tensorflow.keras.datasets import mnist
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.layers import Flatten
+from tensorflow.keras.layers import Dense, Flatten
 from PIL import Image as im
 # =================================================================
 # занесення в змінну "path" шляху до директорії зі скриптом
@@ -89,7 +88,7 @@ model.evaluate(img_test, answ_test_cat)
 model.save('IRC_MNIST.h5')
 # =================================================================
 # передача власного зображення в модель для перевірки
-img = open('MyTestNum.png')
+img = open('MyTestNum1.png')
 img = norm(img)
 res = model.predict(img)
 print(f"Розпізнана цифра: {np.argmax(res)}")
